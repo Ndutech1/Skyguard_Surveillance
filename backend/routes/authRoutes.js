@@ -1,17 +1,19 @@
 const express = require('express');
-const router = express.Router();
-const { registerUser, loginUser } = require('../controllers/authController');
-const nodemailer = require('nodemailer');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User'); // Make sure this path is correct
+const nodemailer = require('nodemailer');
 
-const codeStore = {}; // Temporary memory store (better with Redis)
+const User = require('../models/User.js');
+const { registerUser, loginUser } = require('../controllers/authController.js');
 
-// Registration route
+const router = express.Router();
+
+const codeStore = {}; // Temporary memory store (use Redis in prod)
+
+// Register route
 router.post('/register', registerUser);
 
-// Login route with 2FA code sending
+// Login route with 2FA
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
@@ -23,7 +25,6 @@ router.post('/login', async (req, res) => {
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     codeStore[email] = code;
 
-    // Email the code
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -42,7 +43,7 @@ router.post('/login', async (req, res) => {
     res.json({ message: '2FA code sent', step: 'verify' });
 });
 
-// 2FA verification route
+// Verify 2FA
 router.post('/verify-2fa', async (req, res) => {
     const { email, code } = req.body;
 

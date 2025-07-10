@@ -1,13 +1,15 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-require('dotenv').config();
-
-const authRoutes = require('./routes/authRoutes');
-const reportRoutes = require('./routes/reportRoutes');
-
+const dotenv = require('dotenv');
 const http = require('http');
 const { Server } = require('socket.io');
+
+const authRoutes = require('./routes/authRoutes.js');
+const reportRoutes = require('./routes/reportRoutes.js');
+const logRoutes = require('./routes/logRoutes.js');
+
+dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
@@ -22,28 +24,25 @@ app.get('/', (req, res) => {
 });
 app.use('/api/auth', authRoutes);
 app.use('/api/reports', reportRoutes);
+app.use('/api/logs', logRoutes);
 
-// Database Connection
+// MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
-// Socket.io setup
+// Socket.io
 const io = new Server(server, {
   cors: {
     origin: '*',
   }
 });
-
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
 });
 
-app.set('io', io); // Make io available to routes
+app.set('io', io);
 
 // Start Server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-import logRoutes from './routes/logRoutes.js';
-app.use('/api/logs', logRoutes);

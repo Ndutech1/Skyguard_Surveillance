@@ -1,11 +1,11 @@
-import express from 'express';
-import ActivityLog from '../models/ActivityLog.js';
-import { verifyToken } from '../middleware/auth.js';
+const express = require('express');
+const ActivityLog = require('../models/ActivityLog');
+const { protect } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-router.get('/', verifyToken, async (req, res) => {
-  const allowedRoles = ['ceo', 'teamlead', 'camphead'];
+router.get('/', protect, async (req, res) => {
+  const allowedRoles = ['ceo', 'teamlead', 'camphead', 'pilot'];
   if (!allowedRoles.includes(req.user.role))
     return res.status(403).json({ message: 'Access denied' });
 
@@ -19,4 +19,4 @@ router.get('/', verifyToken, async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

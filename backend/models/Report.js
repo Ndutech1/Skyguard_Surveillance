@@ -1,10 +1,13 @@
 // models/Report.js
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const reportSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: String,
-  location: String, // or { lat, lng } for GPS
+  location: {
+    lat: { type: Number, required: true },
+    lng: { type: Number, required: true }
+  },
   imageUrl: String,
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
@@ -16,4 +19,4 @@ const reportSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-export default mongoose.model('Report', reportSchema);
+module.exports = mongoose.model('Report', reportSchema);

@@ -1,7 +1,7 @@
-const User = require('../models/User');
-const generateToken = require('../config/generateToken');
+const User = require('../models/User.js');
+const generateToken = require('../config/generateToken.js');
 
-exports.registerUser = async (req, res) => {
+const registerUser = async (req, res) => {
   const { name, email, password, role } = req.body;
   try {
     const userExists = await User.findOne({ email });
@@ -20,7 +20,7 @@ exports.registerUser = async (req, res) => {
   }
 };
 
-exports.loginUser = async (req, res) => {
+const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
@@ -38,4 +38,9 @@ exports.loginUser = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: 'Login failed', error: err.message });
   }
+};
+
+module.exports = {
+  registerUser,
+  loginUser,
 };

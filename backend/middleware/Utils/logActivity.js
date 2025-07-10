@@ -1,6 +1,6 @@
-import ActivityLog from '../models/ActivityLog.js';
+const ActivityLog = require('../../models/ActivityLog');
 
-export const logActivity = async (user, action, details = '') => {
+const logActivity = async (user, action, details = '') => {
   try {
     const log = new ActivityLog({
       action,
@@ -13,3 +13,5 @@ export const logActivity = async (user, action, details = '') => {
     console.error('Failed to log activity:', err.message);
   }
 };
+
+module.exports = { logActivity };

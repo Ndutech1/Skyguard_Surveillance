@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const activityLogSchema = new mongoose.Schema({
   action: { type: String, required: true },
@@ -12,4 +12,4 @@ const activityLogSchema = new mongoose.Schema({
   timestamp: { type: Date, default: Date.now }
 });
 
-export default mongoose.model('ActivityLog', activityLogSchema);
+module.exports = mongoose.model('ActivityLog', activityLogSchema);

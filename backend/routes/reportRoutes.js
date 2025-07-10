@@ -1,9 +1,9 @@
-import express from 'express';
-import multer from 'multer';
+const express = require('express');
+const multer = require('multer');
 
-import Report from '../models/Report.js';
-import { verifyToken } from '../middleware/auth.js';
-import { logActivity } from '../utils/logActivity.js';
+const Report = require('../models/Report.js');
+const { protect } = require('../middleware/authMiddleware.js');
+const { logActivity } = require('../middleware/Utils/logActivity.js');
 
 const router = express.Router();
 
@@ -14,12 +14,14 @@ const upload = multer({ storage });
 // POST - Submit Report
 router.post(
     '/',
-    verifyToken,
+    protect,
     upload.single('image'),
     async (req, res) => {
         try {
             const { title, description, lat, lng } = req.body;
             const image = req.file ? req.file.buffer.toString('base64') : null;
+            console.log('request body:', req.body);
+            console.log('User info:', req.user);
 
             const report = new Report({
                 title,
@@ -34,6 +36,7 @@ router.post(
             });
 
             await report.save();
+            console.log('Report saved:', savedReport);
 
             // Emit new report alert via socket.io
             const io = req.app.get('io');
@@ -48,13 +51,14 @@ router.post(
 
             res.status(201).json(report);
         } catch (err) {
-            res.status(500).json({ message: 'Failed to submit report' });
+            console.error('🚨 Report Submission Error:', err);
+            res.status(500).json({ message: 'Failed to submit report', error: err.message });
         }
     }
 );
 
 // GET - All Reports (CEO only)
-router.get('/all', verifyToken, async (req, res) => {
+router.get('/all', protect, async (req, res) => {
     if (req.user.role !== 'ceo') {
         return res.status(403).json({ message: 'Access denied' });
     }
@@ -63,9 +67,9 @@ router.get('/all', verifyToken, async (req, res) => {
 });
 
 // GET - Own Reports (Pilot)
-router.get('/mine', verifyToken, async (req, res) => {
+router.get('/mine', protect, async (req, res) => {
     const reports = await Report.find({ createdBy: req.user.id });
     res.json(reports);
 });
 
-export default router;
+module.exports = router;
