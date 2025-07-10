@@ -142,6 +142,27 @@ const App = () => {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/dashboard/ceo/reports/:reportId/map"
+        element={
+          <ProtectedRoute allowedRoles={['ceo']}>
+            <DashboardLayout>
+              <ReportsMap />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route 
+      path="/dashboard/ceo/analytics"
+        element={
+          <ProtectedRoute allowedRoles={['ceo']}>
+            <DashboardLayout>
+              <CEOCharts />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
     </Routes>
   );
 };

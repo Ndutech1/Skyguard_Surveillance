@@ -9,6 +9,7 @@ import {
   AlertCircle,
   Send,
   MapPinned,
+  BarChart2,
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -71,6 +72,7 @@ const Sidebar = () => {
               <li><Link to="/dashboard/ceo/reports" style={linkStyle}><FileText size={18} /> {!collapsed && 'Reports'}</Link></li>
               <li><Link to="/dashboard/ceo/logs" style={linkStyle}><AlertCircle size={18} /> {!collapsed && 'Activity Logs'}</Link></li>
               <li><Link to="/dashboard/ceo/map" style={linkStyle}><MapPinned size={18} /> {!collapsed && 'Reports Map'}</Link></li>
+              <li><Link to="/dashboard/ceo/analytics" style={linkStyle}><BarChart2 size={18} /> {!collapsed && 'Analytics'}</Link></li>
             </>
           )}
         </ul>
