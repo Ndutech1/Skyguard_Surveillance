@@ -12,7 +12,7 @@ import CampHeadDashboard from './pages/dashboard/CampHeadDashboard';
 import CEODashboard from './pages/dashboard/CEODashboard';
 import SubmitReport from './pages/dashboard/SubmitReport';
 import CEOReports from './pages/dashboard/CEOReports';
-import ActivityLogs from './pages/dashboard/ActivityLogs';
+import ActivityLogs from './pages/ActivityLogs';
 import Unauthorized from './pages/Unauthorized';
 import ReportsMap from './pages/dashboard/ReportsMap';
 
@@ -22,7 +22,7 @@ const App = () => {
   return (
     <Routes>
       {/* Public Routes */}
-      <Route path="/" element={<Login />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/dashboard" element={<RoleRedirect />} />
 
