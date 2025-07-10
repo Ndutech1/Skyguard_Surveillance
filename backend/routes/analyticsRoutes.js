@@ -1,12 +1,12 @@
-import express from 'express';
-import Report from '../models/reportModel.js';
+const express = require('express');
+const Report = require('../models/Report');
 const router = express.Router();
 
 // GET /api/analytics/summary
 router.get('/summary', async (req, res) => {
   try {
     const totalReports = await Report.countDocuments();
-    
+
     const reportsByRole = await Report.aggregate([
       { $group: { _id: "$role", count: { $sum: 1 } } }
     ]);
@@ -33,4 +33,4 @@ router.get('/summary', async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;
