@@ -122,6 +122,26 @@ const App = () => {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/dashboard/ceo/submit-report"
+        element={
+          <ProtectedRoute allowedRoles={['ceo']}>
+            <DashboardLayout>
+              <SubmitReport />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard/ceo/reports/:reportId"
+        element={
+          <ProtectedRoute allowedRoles={['ceo']}>
+            <DashboardLayout>
+              <CEOReports />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 };

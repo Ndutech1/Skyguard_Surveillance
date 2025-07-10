@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import LiveStream from '../../components/LiveStream';
 import PDFReportExport from '../../components/PDFReportExport';
-import html2pdf from 'html2pdf.js'; // ✅ import this
+import html2pdf from 'html2pdf.js';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext'; // ✅ ADD THIS LINE
 
-// Example reports array for demonstration
 const reports = [
   {
     _id: '1',
@@ -27,6 +28,13 @@ const reports = [
 
 const PilotDashboard = () => {
   const streamUrl = 'http://192.168.8.100:8080/stream.mjpeg';
+  const { logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   const handleExportAll = () => {
     html2pdf().from(document.getElementById('all-reports')).save('all_reports.pdf');

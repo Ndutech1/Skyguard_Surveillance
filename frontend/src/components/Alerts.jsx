@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
-
-const socket = io('https://skyguard-surveillance.onrender.com'); // Use your backend IP if deployed
+import socket from '../socket'; 
 
 const Alerts = () => {
   const [alerts, setAlerts] = useState([]);
@@ -11,7 +9,9 @@ const Alerts = () => {
       setAlerts((prev) => [data, ...prev]);
     });
 
-    return () => socket.disconnect();
+    return () => {
+        socket.off('new_report_alert'); // Clean up the listener on unmount
+    }
   }, []);
 
   return (
