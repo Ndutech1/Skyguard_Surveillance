@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/logs', logRoutes);
-appp.use('/api/analytics', analyticsRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
