@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
-import axios from 'axios';
+import API from '../../Utils/axios';
 import { AuthContext } from '../../context/AuthContext';
 
 const CEOReports = () => {
@@ -8,7 +8,7 @@ const CEOReports = () => {
 
   useEffect(() => {
     const fetchReports = async () => {
-      const res = await axios.get('http://localhost:5000/api/reports/all', {
+      const res = await API.get('/reports/all', {
         headers: { Authorization: `Bearer ${user.token}` }
       });
       setReports(res.data);

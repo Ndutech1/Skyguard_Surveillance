@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import PDFReportExport from '../../components/PDFReportExport';
 import html2pdf from 'html2pdf.js';
-import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
+import API from '../../Utils/axios';
 
 const CampHeadDashboard = () => {
   const { user } = useContext(AuthContext);
@@ -11,7 +11,7 @@ const CampHeadDashboard = () => {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/reports/all', {
+        const res = await API.get('/reports/all', {
           headers: { Authorization: `Bearer ${user.token}` },
         });
         setReports(res.data);

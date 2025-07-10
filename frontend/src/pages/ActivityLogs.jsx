@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
-import axios from 'axios';
+import API from '../Utils/axios';
 import { AuthContext } from '../context/AuthContext';
 
 const ActivityLogs = () => {
@@ -8,7 +8,7 @@ const ActivityLogs = () => {
 
   useEffect(() => {
     const fetchLogs = async () => {
-      const res = await axios.get('http://localhost:5000/api/logs', {
+      const res = await API.get('/logs', {
         headers: { Authorization: `Bearer ${user.token}` }
       });
       setLogs(res.data);

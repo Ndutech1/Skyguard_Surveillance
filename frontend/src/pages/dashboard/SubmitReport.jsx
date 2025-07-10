@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import axios from 'axios';
+import API from '../../Utils/axios';
 import { AuthContext } from '../../context/AuthContext';
 
 const SubmitReport = () => {
@@ -54,7 +54,7 @@ const SubmitReport = () => {
     if (form.image) data.append('image', form.image);
 
     try {
-      await axios.post('http://localhost:5000/api/reports', data, {
+      await API.post('/reports', data, {
         headers: {
           Authorization: `Bearer ${user.token}`,
           'Content-Type': 'multipart/form-data',

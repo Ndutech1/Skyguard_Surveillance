@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import axios from 'axios';
+import API from '../../Utils/axios';
 import { AuthContext } from '../../context/AuthContext';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -17,7 +17,7 @@ const ReportsMap = () => {
     useEffect(() => {
         const fetchReports = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/reports/all', {
+                const res = await API.get('/reports/all', {
                     headers: { Authorization: `Bearer ${user.token}` },
                 });
                 setReports(res.data.filter(r => r.location?.lat && r.location?.lng));

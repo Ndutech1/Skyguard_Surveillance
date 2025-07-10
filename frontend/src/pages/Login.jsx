@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import axios from 'axios';
+import API from '../Utils/axios';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,7 +16,7 @@ const Login = () => {
 
     try {
       if (step === 'login') {
-        const res = await axios.post('/api/auth/login', { email, password });
+        const res = await API.post('/auth/login', { email, password });
         if (res.data.step === 'verify') {
           setStep('verify');
         } else {
@@ -24,7 +24,7 @@ const Login = () => {
           navigate('/dashboard');
         }
       } else if (step === 'verify') {
-        const res = await axios.post('/api/auth/verify-2fa', { email, code });
+        const res = await API.post('/auth/verify-2fa', { email, code });
         login(res.data);
         navigate('/dashboard');
       }
