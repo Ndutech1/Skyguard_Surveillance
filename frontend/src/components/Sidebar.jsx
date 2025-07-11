@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
+import { TrendingUp } from 'lucide-react';
 import {
   Menu,
   LogOut,
@@ -10,6 +11,7 @@ import {
   Send,
   MapPinned,
   BarChart2,
+  UploadCloud
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -51,7 +53,7 @@ const Sidebar = () => {
             <Link to="/dashboard/upload-trend"><UploadCloud size={18} /> {!collapsed && 'Upload Trend'}</Link>
           </li>
         )}
-        
+
           {user.role === 'pilot' && (
             <>
               <li><Link to="/dashboard/pilot" style={linkStyle}><LayoutDashboard size={18} /> {!collapsed && 'Dashboard'}</Link></li>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import API from '../../Utils/axios';
+import API from '../Utils/axios';
 import { io } from 'socket.io-client';
 
 const PublicTrends = () => {
@@ -10,7 +10,7 @@ const PublicTrends = () => {
   useEffect(() => {
     const fetchTrends = async () => {
       try {
-        const res = await API.get('/api/trends');
+        const res = await API.get('/trends');
         setTrends(res.data);
       } catch (err) {
         console.error('Failed to fetch trends:', err);

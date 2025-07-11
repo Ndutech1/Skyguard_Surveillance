@@ -17,7 +17,7 @@ import ActivityLogs from './pages/ActivityLogs';
 import Unauthorized from './pages/Unauthorized';
 import ReportsMap from './pages/dashboard/ReportsMap';
 import CEOCharts from './pages/dashboard/CEOCharts';
-import { AuthContext } from './context/AuthContext';
+import PublicTrends from './pages/PublicTrends';
 
 import DashboardLayout from './layout/DashboardLayout';
 
@@ -167,7 +167,7 @@ const App = () => {
         }
       />
       <Route
-        path="/dashboard/upload-trends"
+        path="./pages/UploadTrend"
         element={
           <ProtectedRoute allowedRoles={['ceo', 'teamlead']}>
             <DashboardLayout>

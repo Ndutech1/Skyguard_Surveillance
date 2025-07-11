@@ -1,11 +1,11 @@
 // models/Trend.js
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const trendSchema = new mongoose.Schema({
   title: String,
   description: String,
   imageUrl: String,
-  uploadedBy: String, // 'ceo' or 'teamlead'
+  uploadedBy: String,
   createdAt: {
     type: Date,
     default: Date.now,
@@ -13,4 +13,5 @@ const trendSchema = new mongoose.Schema({
 });
 
 const Trend = mongoose.model('Trend', trendSchema);
-export default Trend;
+
+module.exports = Trend;
