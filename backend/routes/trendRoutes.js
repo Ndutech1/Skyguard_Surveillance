@@ -18,9 +18,7 @@ router.post('/', authMiddleware, async (req, res) => {
   if (!['ceo', 'teamlead'].includes(req.user.role)) {
     return res.status(403).json({ message: 'Unauthorized to upload trends' });
   }
-const io = req.app.get('io');
-io.emit('newTrend', trend);
-
+  
   const { title, description, imageUrl } = req.body;
 
   const trend = new Trend({
