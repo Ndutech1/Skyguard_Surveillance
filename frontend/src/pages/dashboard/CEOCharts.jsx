@@ -11,7 +11,7 @@ const CEOCharts = () => {
 
   useEffect(() => {
     const fetchSummary = async () => {
-      const res = await API.get('/api/analytics/summary', {
+      const res = await API.get('/analytics/summary', {
         headers: { Authorization: `Bearer ${user.token}` }
       });
       setSummary(res.data);

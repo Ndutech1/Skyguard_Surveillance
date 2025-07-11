@@ -43,6 +43,15 @@ const Sidebar = () => {
 
       <nav style={{ flex: 1 }}>
         <ul style={{ listStyle: 'none', padding: 0 }}>
+          <li>
+            <Link to="/trends"><TrendingUp size={18} /> {!collapsed && 'Trends'}</Link>
+          </li>
+          {['ceo', 'teamlead'].includes(user.role) && (
+          <li>
+            <Link to="/dashboard/upload-trend"><UploadCloud size={18} /> {!collapsed && 'Upload Trend'}</Link>
+          </li>
+        )}
+        
           {user.role === 'pilot' && (
             <>
               <li><Link to="/dashboard/pilot" style={linkStyle}><LayoutDashboard size={18} /> {!collapsed && 'Dashboard'}</Link></li>

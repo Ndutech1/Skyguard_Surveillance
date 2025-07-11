@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 
+import React from 'react';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import RoleRedirect from './components/RoleRedirect';
@@ -15,6 +16,8 @@ import CEOReports from './pages/dashboard/CEOReports';
 import ActivityLogs from './pages/ActivityLogs';
 import Unauthorized from './pages/Unauthorized';
 import ReportsMap from './pages/dashboard/ReportsMap';
+import CEOCharts from './pages/dashboard/CEOCharts';
+import { AuthContext } from './context/AuthContext';
 
 import DashboardLayout from './layout/DashboardLayout';
 
@@ -25,6 +28,7 @@ const App = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/dashboard" element={<RoleRedirect />} />
+      <Route path="/trends" element={<PublicTrends />} />
 
       {/* Unauthorized */}
       <Route path="/unauthorized" element={<Unauthorized />} />
@@ -158,6 +162,16 @@ const App = () => {
           <ProtectedRoute allowedRoles={['ceo']}>
             <DashboardLayout>
               <CEOCharts />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard/upload-trends"
+        element={
+          <ProtectedRoute allowedRoles={['ceo', 'teamlead']}>
+            <DashboardLayout>
+              <PublicTrends />
             </DashboardLayout>
           </ProtectedRoute>
         }

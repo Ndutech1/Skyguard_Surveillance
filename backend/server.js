@@ -9,6 +9,7 @@ const authRoutes = require('./routes/authRoutes.js');
 const reportRoutes = require('./routes/reportRoutes.js');
 const logRoutes = require('./routes/logRoutes.js');
 const analyticsRoutes = require('./routes/analyticsRoutes.js');
+const trendRoutes = require('./routes/trendRoutes.js');
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/logs', logRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/trends', trendRoutes);
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
