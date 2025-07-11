@@ -1,6 +1,7 @@
 const express = require('express');
 const Trend = require('../models/Trend');
-const authMiddleware = require('../middleware/authMiddleware');
+const { protect, roleCheck } = require('../middleware/authMiddleware'); // ✅ destructure correctly
+
 const router = express.Router();
 
 // GET: all trends
@@ -14,11 +15,7 @@ router.get('/', async (req, res) => {
 });
 
 // POST: upload a new trend (CEO or TeamLead only)
-router.post('/', authMiddleware, async (req, res) => {
-  if (!['ceo', 'teamlead'].includes(req.user.role)) {
-    return res.status(403).json({ message: 'Unauthorized to upload trends' });
-  }
-  
+router.post('/', protect, roleCheck(['ceo', 'teamlead']), async (req, res) => {
   const { title, description, imageUrl } = req.body;
 
   const trend = new Trend({
@@ -30,9 +27,10 @@ router.post('/', authMiddleware, async (req, res) => {
 
   try {
     await trend.save();
+
     // Emit new trend alert via socket.io
     const io = req.app.get('io');
-    io.emit('newTrend', trend);
+    io?.emit?.('newTrend', trend); // optional chaining in case socket not active
 
     res.status(201).json(trend);
   } catch (err) {
