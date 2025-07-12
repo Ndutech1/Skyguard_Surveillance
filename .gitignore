@@ -26,3 +26,4 @@ stream/*.exe
 # VSCode and IDE configs
 .vscode/
 .idea/
+skyguard-stream-engine.zip
