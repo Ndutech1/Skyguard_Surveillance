@@ -7,6 +7,9 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      workbox: {
+        maximumFileSizeToCacheInBytes: 5000000  // ✅ FIXED
+      },
       manifest: {
         name: 'SkyGuard Surveillance',
         short_name: 'SkyGuard',
