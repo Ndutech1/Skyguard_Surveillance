@@ -6,6 +6,8 @@ import Register from './pages/Register';
 import RoleRedirect from './components/RoleRedirect';
 import ProtectedRoute from './components/ProtectedRoute';
 
+import SetStreamURL from './pages/dashboard/SetStreamURL';
+import LiveStream from './components/LiveStream';
 import PilotDashboard from './pages/dashboard/PilotDashboard';
 import ITDashboard from './pages/dashboard/ITDashboard';
 import TeamLeadDashboard from './pages/dashboard/TeamLeadDashboard';
@@ -18,6 +20,7 @@ import Unauthorized from './pages/Unauthorized';
 import ReportsMap from './pages/dashboard/ReportsMap';
 import CEOCharts from './pages/dashboard/CEOCharts';
 import PublicTrends from './pages/PublicTrends';
+import UploadTrend from './pages/UploadTrend';
 
 import DashboardLayout from './layout/DashboardLayout';
 
@@ -61,6 +64,22 @@ const App = () => {
         element={
           <ProtectedRoute allowedRoles={['it']}>
             <ITDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/components/Livestream"
+        element={
+          <ProtectedRoute allowedRoles={['it', 'pilot']}>
+            <LiveStream />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard/it/set-stream-url"
+        element={
+          <ProtectedRoute allowedRoles={['it']}>
+            <SetStreamURL />
           </ProtectedRoute>
         }
       />
@@ -167,11 +186,11 @@ const App = () => {
         }
       />
       <Route
-        path="./pages/UploadTrend"
+        path="/dashboard/upload-trend"
         element={
           <ProtectedRoute allowedRoles={['ceo', 'teamlead']}>
             <DashboardLayout>
-              <PublicTrends />
+              < UploadTrend/>
             </DashboardLayout>
           </ProtectedRoute>
         }

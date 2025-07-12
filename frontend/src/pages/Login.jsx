@@ -42,6 +42,7 @@ const Login = () => {
         if (res.data.step === 'verify') {
           setStep('verify');
         } else {
+          localStorage.setItem('token', res.data.token);
           const mergedUser = { ...res.data.user, token: res.data.token };
           login(mergedUser);
           redirectToRoleDashboard(mergedUser.role);
@@ -49,6 +50,8 @@ const Login = () => {
         }
       } else if (step === 'verify') {
         const res = await API.post('/auth/verify-2fa', { email, code });
+
+        localStorage.setItem('token', res.data.token);
         const mergedUser = { ...res.data.user, token: res.data.token };
         login(mergedUser);
         redirectToRoleDashboard(mergedUser.role);

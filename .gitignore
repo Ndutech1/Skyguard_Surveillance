@@ -1,0 +1,28 @@
+# Node dependencies
+**/node_modules/
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+
+# Env vars
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build outputs
+dist/
+build/
+
+# FFmpeg + NGINX binaries (do not commit)
+stream
+stream/ffmpeg/
+stream/nginx/
+stream/*.exe
+
+# VSCode and IDE configs
+.vscode/
+.idea/

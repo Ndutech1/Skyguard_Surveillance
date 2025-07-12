@@ -1,7 +1,6 @@
 import { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { TrendingUp } from 'lucide-react';
 import {
   Menu,
   LogOut,
@@ -11,7 +10,9 @@ import {
   Send,
   MapPinned,
   BarChart2,
-  UploadCloud
+  TrendingUp,
+  UploadCloud,
+  DroneIcon
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -39,21 +40,29 @@ const Sidebar = () => {
         flexDirection: 'column',
       }}
     >
+      {/* Toggle Collapse */}
       <div onClick={() => setCollapsed(!collapsed)} style={{ cursor: 'pointer', marginBottom: 20 }}>
         <Menu size={collapsed ? 24 : 20} />
       </div>
 
+      {/* Nav Menu */}
       <nav style={{ flex: 1 }}>
         <ul style={{ listStyle: 'none', padding: 0 }}>
+          {/* Trends Section */}
           <li>
-            <Link to="/trends"><TrendingUp size={18} /> {!collapsed && 'Trends'}</Link>
+            <Link to="/trends" style={linkStyle}>
+              <TrendingUp size={18} /> {!collapsed && 'Trends'}
+            </Link>
           </li>
           {['ceo', 'teamlead'].includes(user.role) && (
-          <li>
-            <Link to="/dashboard/upload-trend"><UploadCloud size={18} /> {!collapsed && 'Upload Trend'}</Link>
-          </li>
-        )}
+            <li style={{ marginLeft: collapsed ? 0 : 20 }}>
+              <Link to="/dashboard/upload-trend" style={linkStyle}>
+                <UploadCloud size={18} /> {!collapsed && 'Upload Trend'}
+              </Link>
+            </li>
+          )}
 
+          {/* Pilot */}
           {user.role === 'pilot' && (
             <>
               <li><Link to="/dashboard/pilot" style={linkStyle}><LayoutDashboard size={18} /> {!collapsed && 'Dashboard'}</Link></li>
@@ -61,6 +70,7 @@ const Sidebar = () => {
             </>
           )}
 
+          {/* Team Lead */}
           {user.role === 'teamlead' && (
             <>
               <li><Link to="/dashboard/teamlead" style={linkStyle}><LayoutDashboard size={18} /> {!collapsed && 'Dashboard'}</Link></li>
@@ -68,6 +78,7 @@ const Sidebar = () => {
             </>
           )}
 
+          {/* Camp Head */}
           {user.role === 'camphead' && (
             <>
               <li><Link to="/dashboard/camphead" style={linkStyle}><LayoutDashboard size={18} /> {!collapsed && 'Dashboard'}</Link></li>
@@ -77,6 +88,26 @@ const Sidebar = () => {
             </>
           )}
 
+          {/* IT */}
+          {user.role === 'it' && (
+            <>
+              <li><Link to="/dashboard/it" style={linkStyle}><LayoutDashboard size={18} /> {!collapsed && 'Dashboard'}</Link></li>
+              <li><Link to="/dashboard/it/reports" style={linkStyle}><FileText size={18} /> {!collapsed && 'Reports'}</Link></li>
+              <li><Link to="/dashboard/it/logs" style={linkStyle}><AlertCircle size={18} /> {!collapsed && 'Activity Logs'}</Link></li>
+              <li><Link to="/dashboard/it/set-stream-url" style={linkStyle}><UploadCloud size={18} /> {!collapsed && 'Set Stream URL'}</Link></li>
+              <li><Link to="/dashboard/it/analytics" style={linkStyle}><BarChart2 size={18} /> {!collapsed && 'Analytics'}</Link></li>
+              
+            </>
+          )}
+          {['it', 'pilot'].includes(user.role) && (
+          <>  
+            <li><Link to={'/components/Livestream'} style={linkStyle}><DroneIcon size={18} /> {!collapsed && 'Live Stream'}</Link></li>
+          </>
+          )}
+          
+      
+
+          {/* CEO */}
           {user.role === 'ceo' && (
             <>
               <li><Link to="/dashboard/ceo" style={linkStyle}><LayoutDashboard size={18} /> {!collapsed && 'Dashboard'}</Link></li>
@@ -89,6 +120,7 @@ const Sidebar = () => {
         </ul>
       </nav>
 
+      {/* Logout Button */}
       <button onClick={handleLogout} style={logoutBtnStyle}>
         <LogOut size={18} /> {!collapsed && 'Logout'}
       </button>

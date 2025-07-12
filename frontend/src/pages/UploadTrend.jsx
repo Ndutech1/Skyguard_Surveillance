@@ -1,9 +1,7 @@
-import { useState, useContext } from 'react';
-import API from '../../Utils/axios';
-import { AuthContext } from '../../context/AuthContext';
+import { useState } from 'react';
+import API from '../Utils/axios';
 
 const UploadTrend = () => {
-  const { user } = useContext(AuthContext);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [imageUrl, setImageUrl] = useState('');
@@ -13,13 +11,17 @@ const UploadTrend = () => {
     reader.onload = () => {
       setImageUrl(reader.result); // Base64 encoded image
     };
-    reader.readAsDataURL(e.target.files[0]);
+    if (e.target.files[0]) {
+      reader.readAsDataURL(e.target.files[0]);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      await API.post('/api/trends', { title, description, imageUrl });
+      await API.post('/trends', { title, description, imageUrl });
+
       alert('Trend uploaded successfully!');
       setTitle('');
       setDescription('');
