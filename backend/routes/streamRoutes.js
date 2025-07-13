@@ -8,6 +8,10 @@ let streamSource = 'rtsp://default';
 
 // 🟢 Start Stream
 router.post('/start', (req, res) => {
+  if (process.env.RENDER === 'true') {
+    return res.status(400).json({ message: 'Stream start not supported on Render cloud.' });
+  }
+
   exec('start "" stream\\run-stream.bat', (err, stdout, stderr) => {
     if (err) {
       console.error('Start error:', err);
@@ -16,6 +20,7 @@ router.post('/start', (req, res) => {
     res.json({ message: 'Stream started' });
   });
 });
+
 
 // 🔴 Stop Stream
 router.post('/stop', (req, res) => {

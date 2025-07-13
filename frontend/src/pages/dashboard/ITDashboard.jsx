@@ -11,22 +11,25 @@ const ITDashboard = () => {
   useEffect(() => {
     // Auto-start the stream on IT dashboard mount
     API.post('/stream/start')
-      .then(() => {
-        setStatus('🟢 Stream Running');
+      .then(() => setStatus('🟢 Stream Running'))
+      .catch((err) => {
+        const msg = err.response?.data?.message || 'Stream failed';
+        setStatus(`🔴 ${msg}`);
       })
-      .catch(() => {
-        setStatus('🔴 Stream Failed to Start');
-      })
-      .finally(() => {
-        setStarting(false);
-      });
+      .finally(() => setStarting(false)); // 🟢 Make sure we stop showing "starting"
   }, []);
 
   return (
     <div>
       <h2>
         Welcome IT Staff 👨‍💻{' '}
-        <span style={{ fontSize: '0.9rem', color: status.includes('🟢') ? 'green' : 'red' }}>
+        <span
+          style={{
+            fontSize: '0.9rem',
+            color: status.includes('🟢') ? 'green' : 'red',
+            marginLeft: '10px',
+          }}
+        >
           {status}
         </span>
       </h2>
