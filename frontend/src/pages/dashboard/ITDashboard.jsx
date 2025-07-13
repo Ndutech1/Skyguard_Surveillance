@@ -1,37 +1,54 @@
 import React, { useEffect, useState } from 'react';
 import LiveStream from '../../components/LiveStream';
 import Alerts from '../../components/Alerts';
-import API from '../../Utils/axios'; // Adjust path if needed
+import SetStreamURL from './SetStreamURL';
+import API from '../../Utils/axios';
 
 const ITDashboard = () => {
-    const [streamUrl, setStreamUrl] = useState('');
-    const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState('🔘 Idle');
+  const [starting, setStarting] = useState(true);
 
-    useEffect(() => {
-        API.get('/stream/get-url') // Change base URL if deployed
-            .then(res => {
-                setStreamUrl(res.data.url);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error('Failed to fetch stream URL', err);
-                setLoading(false);
-            });
-    }, []);
+  useEffect(() => {
+    // Auto-start the stream on IT dashboard mount
+    API.post('/stream/start')
+      .then(() => {
+        setStatus('🟢 Stream Running');
+      })
+      .catch(() => {
+        setStatus('🔴 Stream Failed to Start');
+      })
+      .finally(() => {
+        setStarting(false);
+      });
+  }, []);
 
-    return (
-        <div>
-            <h2>Welcome IT Staff 👨‍💻</h2>
-            <Alerts />
-            {loading ? (
-                <p>⏳ Loading stream URL...</p>
-            ) : streamUrl ? (
-                <LiveStream streamUrl={streamUrl} />
-            ) : (
-                <p>⚠️ No stream URL configured. Please set it first.</p>
-            )}
-        </div>
-    );
+  return (
+    <div>
+      <h2>
+        Welcome IT Staff 👨‍💻{' '}
+        <span style={{ fontSize: '0.9rem', color: status.includes('🟢') ? 'green' : 'red' }}>
+          {status}
+        </span>
+      </h2>
+
+      <Alerts />
+
+      {starting ? (
+        <p>⏳ Starting stream...</p>
+      ) : status.includes('🟢') ? (
+        <>
+          <LiveStream />
+          <hr style={{ margin: '20px 0' }} />
+          <SetStreamURL />
+        </>
+      ) : (
+        <>
+          <p>⚠️ Stream not active. Try checking your connection or stream config.</p>
+          <SetStreamURL />
+        </>
+      )}
+    </div>
+  );
 };
 
 export default ITDashboard;

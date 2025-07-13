@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
-import API from '../Utils/axios'; // Adjust path if needed
+import API from '../Utils/axios';
 
 const LiveStream = () => {
   const videoRef = useRef(null);
@@ -9,16 +9,22 @@ const LiveStream = () => {
   const [streamUrl, setStreamUrl] = useState('');
   const [status, setStatus] = useState('⏳ Waiting for stream...');
 
+  // 🔁 Fetch stream URL from backend
   useEffect(() => {
     API.get('/stream/get-url')
-      .then(() => {
-        setStreamUrl('http://localhost:8080/hls/skyguard.m3u8'); // Local NGINX stream endpoint
+      .then((res) => {
+        if (res.data?.url) {
+          setStreamUrl(res.data.url);
+        } else {
+          setStatus('❌ No stream URL configured.');
+        }
       })
       .catch(() => {
         setStatus('❌ Failed to load stream configuration.');
       });
   }, []);
 
+  // 🎥 Initialize Video.js player
   useEffect(() => {
     if (!streamUrl) return;
 
@@ -28,16 +34,14 @@ const LiveStream = () => {
       preload: 'auto',
       fluid: true,
       techOrder: ['html5'],
-      html5: {
-        hls: {
-          overrideNative: true,
-          lowLatencyMode: true,
-        }
-      },
-      sources: [{
-        src: streamUrl,
-        type: 'application/x-mpegURL',
-      }]
+      sources: [
+        {
+          src: streamUrl,
+          type: streamUrl.endsWith('.m3u8')
+            ? 'application/x-mpegURL'
+            : 'application/x-rtsp',
+        },
+      ],
     });
 
     playerRef.current = player;
@@ -48,23 +52,26 @@ const LiveStream = () => {
       });
     });
 
-    player.on('playing', () => {
-      setStatus('🟢 Live Streaming');
-    });
-
+    player.on('playing', () => setStatus('🟢 Live Streaming'));
     player.on('error', () => {
-      setStatus('⚠️ Disconnected. Trying to reconnect...');
+      setStatus('⚠️ Disconnected. Retrying...');
       retryConnect(1);
     });
 
     return () => player.dispose();
   }, [streamUrl]);
 
+  // 🔁 Retry logic on stream error
   const retryConnect = (attempt) => {
     const delay = Math.min(3000 * attempt, 15000);
     setTimeout(() => {
       if (playerRef.current) {
-        playerRef.current.src({ src: streamUrl, type: 'application/x-mpegURL' });
+        playerRef.current.src({
+          src: streamUrl,
+          type: streamUrl.endsWith('.m3u8')
+            ? 'application/x-mpegURL'
+            : 'application/x-rtsp',
+        });
         playerRef.current.load();
         playerRef.current.play().catch(() => {
           if (attempt < 5) retryConnect(attempt + 1);
