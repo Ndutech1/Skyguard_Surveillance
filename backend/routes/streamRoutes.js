@@ -30,6 +30,7 @@ router.post('/stop', (req, res) => {
 
 // ✏️ Set Stream Source (Dynamic: File or MongoDB)
 router.post('/set-url', async (req, res) => {
+  console.log('Incoming set url payload:', req.body);
   const { url } = req.body;
   if (!url || !url.startsWith('rtsp://')) {
     return res.status(400).json({ message: 'Invalid RTSP URL' });
