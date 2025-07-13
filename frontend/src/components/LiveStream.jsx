@@ -12,7 +12,7 @@ const LiveStream = () => {
   useEffect(() => {
     API.get('/stream/get-url')
       .then(() => {
-        setStreamUrl('http://localhost:8080/stream.m3u8'); // Local NGINX stream endpoint
+        setStreamUrl('http://localhost:8080/hls/skyguard.m3u8'); // Local NGINX stream endpoint
       })
       .catch(() => {
         setStatus('❌ Failed to load stream configuration.');

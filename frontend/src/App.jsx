@@ -76,7 +76,7 @@ const App = () => {
         }
       />
       <Route
-        path="/dashboard/it/set-stream-url"
+        path="/dashboard/set-stream-url"
         element={
           <ProtectedRoute allowedRoles={['it']}>
             <SetStreamURL />

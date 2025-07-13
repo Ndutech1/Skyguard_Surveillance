@@ -89,14 +89,14 @@ const Sidebar = () => {
           )}
 
           {/* IT */}
-          {user.role === 'it' && (
+          {user.role === 'It' && (
             <>
               <li><Link to="/dashboard/it" style={linkStyle}><LayoutDashboard size={18} /> {!collapsed && 'Dashboard'}</Link></li>
               <li><Link to="/dashboard/it/reports" style={linkStyle}><FileText size={18} /> {!collapsed && 'Reports'}</Link></li>
               <li><Link to="/dashboard/it/logs" style={linkStyle}><AlertCircle size={18} /> {!collapsed && 'Activity Logs'}</Link></li>
               <li><Link to="/dashboard/it/set-stream-url" style={linkStyle}><UploadCloud size={18} /> {!collapsed && 'Set Stream URL'}</Link></li>
               <li><Link to="/dashboard/it/analytics" style={linkStyle}><BarChart2 size={18} /> {!collapsed && 'Analytics'}</Link></li>
-              
+
             </>
           )}
           {['it', 'pilot'].includes(user.role) && (

@@ -27,3 +27,4 @@ stream/*.exe
 .vscode/
 .idea/
 skyguard-stream-engine.zip
+backend/.env

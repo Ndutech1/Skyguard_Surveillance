@@ -2,8 +2,9 @@ const express = require('express');
 const fs = require('fs');
 const { exec } = require('child_process');
 const router = express.Router();
+const StreamConfig = require('../models/StreamConfig'); // 🆕 DB model
 
-let streamSource = 'rtsp://default'; // default fallback
+let streamSource = 'rtsp://default';
 
 // 🟢 Start Stream
 router.post('/start', (req, res) => {
@@ -27,31 +28,49 @@ router.post('/stop', (req, res) => {
   });
 });
 
-// ✏️ Set Stream Source (from IT Staff input)
-router.post('/set-url', (req, res) => {
+// ✏️ Set Stream Source (Dynamic: File or MongoDB)
+router.post('/set-url', async (req, res) => {
   const { url } = req.body;
-
   if (!url || !url.startsWith('rtsp://')) {
     return res.status(400).json({ message: 'Invalid RTSP URL' });
   }
 
   try {
-    fs.writeFileSync('stream/source.txt', url); // Save to file for FFmpeg to read
+    if (process.env.USE_DB_STREAM === 'true') {
+      // ⛅ Use DB in cloud
+      await StreamConfig.findOneAndUpdate({}, {
+        url,
+        updatedAt: new Date(),
+      }, { upsert: true });
+    } else {
+      // 💻 Use file locally
+      fs.writeFileSync('stream/source.txt', url);
+    }
+
     streamSource = url;
     res.json({ message: 'RTSP stream URL saved successfully' });
   } catch (err) {
-    console.error('Failed to write URL:', err);
+    console.error('Failed to save stream URL:', err);
     res.status(500).json({ message: 'Failed to save stream URL' });
   }
 });
 
-// 📡 Get Current Stream Source
-router.get('/get-url', (req, res) => {
+// 📡 Get Stream URL (Dynamic: File or MongoDB)
+router.get('/get-url', async (req, res) => {
   try {
-    const url = fs.readFileSync('stream/source.txt', 'utf-8') || streamSource;
+    let url;
+
+    if (process.env.USE_DB_STREAM === 'true') {
+      const config = await StreamConfig.findOne();
+      url = config?.url || streamSource;
+    } else {
+      url = fs.readFileSync('stream/source.txt', 'utf-8') || streamSource;
+    }
+
     res.json({ url });
-  } catch {
-    res.json({ url: streamSource });
+  } catch (err) {
+    console.error('Get stream URL error:', err);
+    res.status(500).json({ message: 'Failed to get stream URL' });
   }
 });
 

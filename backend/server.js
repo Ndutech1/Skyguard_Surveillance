@@ -21,7 +21,7 @@ const server = http.createServer(app);
 // ✅ Initialize Socket.IO before using it
 const io = new Server(server, {
   cors: {
-    origin: '*',
+    origin: 'https://skyguard-surveillance.vercel.app',
   }
 });
 
